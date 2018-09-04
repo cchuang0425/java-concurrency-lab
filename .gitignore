@@ -1,3 +1,60 @@
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+/bin/
+
+### NetBeans ###
+nbproject/
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+### VisualStudio Code ###
+.vscode/
+
+### H2 DataBase ###
+*.mv.db
+*.trace.db
+
+## FrontEnd ###
+.DS_Store
+node_modules/
+npm-debug.log
+yarn-error.log
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+### BackEnd ###
+.stored-files
+.vue-work
+
+### TestData ###
+.backup/
+
+### log ###
+logs
+*.log
+
 # Compiled class file
 *.class
 

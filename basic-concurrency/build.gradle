@@ -1,0 +1,34 @@
+buildscript {
+    ext {
+        groupId = "org.iii"
+        versionNum = "1.0-SNAPSHOT"
+        artifactId = "basic-concurrency"
+    }
+}
+
+apply plugin: "java"
+apply plugin: "idea"
+apply plugin: "eclipse"
+
+group "$groupId"
+version "$versionNum"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+[compileJava, compileTestJava]*.options*.encoding = "UTF-8"
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, "seconds"
+}
+
+configurations.compile { transitive = false }
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile("junit:junit:4.12")
+    testCompile("org.hamcrest:hamcrest-all:1.3")
+}
