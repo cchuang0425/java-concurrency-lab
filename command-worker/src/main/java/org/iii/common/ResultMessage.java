@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommandMessage<P> {
+public class ResultMessage<R> {
     private UUID id;
     private String name;
-    private P param;
+    private R result;
 }

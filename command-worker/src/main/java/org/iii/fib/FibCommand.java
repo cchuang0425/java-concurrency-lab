@@ -6,11 +6,13 @@ import org.springframework.stereotype.Component;
 
 import org.iii.common.Command;
 
+import static org.iii.fib.FibCommand.COMMAND_NAME;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
-@Component
+@Component(COMMAND_NAME)
 @Scope(SCOPE_PROTOTYPE)
 public class FibCommand implements Command<Long, Long> {
+    public static final String COMMAND_NAME = "FibCommand";
 
     @Autowired
     private FibService service;
