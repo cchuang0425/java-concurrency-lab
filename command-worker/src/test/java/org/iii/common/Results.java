@@ -13,7 +13,7 @@ import org.iii.fib.FibCommand;
 import org.iii.mq.ChannelRegistry;
 import org.iii.prime.PrimeCommand;
 
-import static org.iii.util.JsonUtils.convertFromJson;
+import static org.iii.util.JsonUtils.convertObjectFromJson;
 import static org.iii.util.JsonUtils.jsonMapper;
 
 public class Results {
@@ -36,7 +36,7 @@ public class Results {
             return ResultMessage.builder()
                                 .id(commandId)
                                 .name(commandName)
-                                .result(convertFromJson(json.get("result").toString(), resultType))
+                                .result(convertObjectFromJson(json.get("result").toString(), resultType))
                                 .build();
         } catch (IOException ex) {
             ex.printStackTrace(System.err);

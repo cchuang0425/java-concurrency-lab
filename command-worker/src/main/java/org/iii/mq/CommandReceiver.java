@@ -10,7 +10,7 @@ import org.iii.CommandWorkerConfig;
 public class CommandReceiver {
 
     @Autowired
-    private MessageExecutorService executor;
+    private MessageExecutionService executor;
 
     @JmsListener(destination = CommandWorkerConfig.COMMAND_QUEUE,
             containerFactory = "mqListenerContainerFactory")

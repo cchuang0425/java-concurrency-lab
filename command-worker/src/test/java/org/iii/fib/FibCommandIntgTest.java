@@ -1,6 +1,5 @@
 package org.iii.fib;
 
-import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -22,7 +21,7 @@ public class FibCommandIntgTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testFibCommand() throws IOException, InterruptedException, ExecutionException {
+    public void testFibCommand() throws InterruptedException, ExecutionException {
         CommandMessage<Long> commandMessage = prepareFibCommandMessage();
         ResultMessage<Long> resultMessage = (ResultMessage<Long>) CommandExecutors.executeCommand(commandMessage)
                                                                                   .get();

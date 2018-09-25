@@ -26,6 +26,7 @@ public class CommandsTest {
         jsonMapper = new ObjectMapper().findAndRegisterModules();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testConvertCommandMessage() throws IOException {
         CommandMessage<Long> origMessage = prepareFibCommandMessage();
@@ -35,13 +36,10 @@ public class CommandsTest {
     }
 
     private CommandMessage<Long> prepareFibCommandMessage() {
-        CommandMessage message = CommandMessage.builder()
-                                               .id(UUID.randomUUID())
-                                               .name(FibCommand.COMMAND_NAME)
-                                               .param(10L)
-                                               .build();
-
-        return message;
+        return CommandMessage.<Long>builder().id(UUID.randomUUID())
+                                             .name(FibCommand.COMMAND_NAME)
+                                             .param(10L)
+                                             .build();
     }
 
     @Test

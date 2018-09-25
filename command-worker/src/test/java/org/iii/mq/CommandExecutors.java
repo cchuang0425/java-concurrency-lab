@@ -1,7 +1,7 @@
 package org.iii.mq;
 
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.springframework.context.ApplicationContext;
@@ -12,19 +12,14 @@ import org.iii.common.CommandMessage;
 import org.iii.common.ResultMessage;
 import org.iii.common.Results;
 
-import static org.iii.util.JsonUtils.convertToJson;
+import static org.iii.CommandWorkerConfig.WORKER_POOL_NAME;
+import static org.iii.util.JsonUtils.convertJsonFromObject;
 
 public class CommandExecutors {
 
-
-    @Async("workerPool")
+    @Async(WORKER_POOL_NAME)
     public static CompletableFuture<ResultMessage<?>> executeCommand(CommandMessage<?> commandMessage) {
-        ApplicationContext context =
-                CommandWorkerConfig.ApplicationContextProvider.getApplicationContext();
-
-        Executor pool = (Executor) context.getBean("workerPool");
-
-        return CompletableFuture.supplyAsync(() -> sendCommandAndWait(commandMessage), pool);
+        return CompletableFuture.supplyAsync(() -> sendCommandAndWait(commandMessage));
     }
 
     private static ResultMessage<?> sendCommandAndWait(CommandMessage<?> commandMessage) {
@@ -36,11 +31,11 @@ public class CommandExecutors {
 
         try {
             LinkedBlockingQueue<String> channel = channels.createChannel(commandMessage.getId());
-            sender.sendCommand(convertToJson(commandMessage));
+            sender.sendCommand(convertJsonFromObject(commandMessage));
             String resultJson = channel.take();
 
             return Results.convertResult(resultJson);
-        } catch (Exception ex) {
+        } catch (IOException | InterruptedException ex) {
             ex.printStackTrace(System.err);
             throw new RuntimeException(ex);
         }

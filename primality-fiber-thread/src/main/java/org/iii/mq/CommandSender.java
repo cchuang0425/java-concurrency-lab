@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
-import static org.iii.CommandWorkerConfig.COMMAND_QUEUE;
+import static org.iii.PrimalityFiberConfig.COMMAND_QUEUE;
 
 @Component
 public class CommandSender {

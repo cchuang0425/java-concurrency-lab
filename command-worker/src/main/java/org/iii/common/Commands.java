@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.ImmutableMap;
@@ -15,6 +14,7 @@ import org.iii.CommandWorkerConfig;
 import org.iii.fib.FibCommand;
 import org.iii.prime.PrimeCommand;
 
+import static org.iii.CommandWorkerConfig.WORKER_POOL_NAME;
 import static org.iii.util.JsonUtils.jsonMapper;
 
 public abstract class Commands {
@@ -46,13 +46,11 @@ public abstract class Commands {
         }
     }
 
-    @Async("workerPool")
+    @Async(WORKER_POOL_NAME)
     @SuppressWarnings("unchecked")
     public static <R, P> CompletableFuture<ResultMessage<R>> runCommandAsync(CommandMessage<P> commandMessage) {
         ApplicationContext context =
                 CommandWorkerConfig.ApplicationContextProvider.getApplicationContext();
-
-        Executor pool = (Executor) context.getBean("workerPool");
 
         Command<R, P> command = (Command<R, P>) context.getBean(commandMessage.getName());
 
@@ -60,8 +58,7 @@ public abstract class Commands {
                 () -> ResultMessage.<R>builder().id(commandMessage.getId())
                                                 .name(commandMessage.getName())
                                                 .result(command.execute(commandMessage.getParam()))
-                                                .build(),
-                pool);
+                                                .build());
     }
 
     @SuppressWarnings("unchecked")

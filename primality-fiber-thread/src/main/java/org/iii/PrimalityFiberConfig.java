@@ -4,6 +4,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 import javax.jms.ConnectionFactory;
 
+import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.ApplicationContext;
@@ -15,28 +16,25 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
-public class CommandWorkerConfig {
+public class PrimalityFiberConfig {
 
     public static final String COMMAND_QUEUE = "CommandQueue";
     public static final String RESULT_QUEUE = "ResultQueue";
 
-    public static final String WORKER_POOL_NAME = "workerPool";
-    public static final String MQ_LISTENER_CONTAINER_FACTORY_NAME = "mqListenerContainerFactory";
-
-    @Bean(WORKER_POOL_NAME)
+    @Bean("workerPool")
     public Executor asyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(10);
         executor.setMaxPoolSize(20);
         executor.setQueueCapacity(200);
         executor.setKeepAliveSeconds(120);
-        executor.setThreadNamePrefix("cmd-");
+        executor.setThreadNamePrefix("math-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
         return executor;
     }
 
-    @Bean(MQ_LISTENER_CONTAINER_FACTORY_NAME)
+    @Bean("mqListenerContainerFactory")
     public JmsListenerContainerFactory<?> mqListenerContainerFactory(ConnectionFactory connectionFactory,
             DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
