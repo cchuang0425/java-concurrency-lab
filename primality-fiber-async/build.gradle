@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.5.RELEASE'
+        springBootVersion = "2.0.5.RELEASE"
     }
     repositories {
         mavenCentral()
@@ -10,14 +10,19 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
 
-group = 'org.iii'
-version = '0.0.1-SNAPSHOT'
+group = "org.iii"
+version = "0.0.1-SNAPSHOT"
 sourceCompatibility = 1.8
+
+dependencyManagement {
+    imports { mavenBom "io.projectreactor:reactor-bom:Bismuth-RELEASE" }
+}
 
 repositories {
     mavenCentral()
@@ -25,16 +30,16 @@ repositories {
 
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-activemq')
+    compile("org.springframework.boot:spring-boot-starter-activemq")
     compile("org.apache.activemq:activemq-broker")
     compile("org.apache.activemq:activemq-pool")
 
-    compile("io.projectreactor:reactor-core:3.2.0.RELEASE")
+    compile("io.projectreactor:reactor-core")
 
     compile("com.fasterxml.jackson.core:jackson-databind:2.9.6")
     compile("com.fasterxml.jackson.core:jackson-core:2.9.6")
     compile("com.fasterxml.jackson.core:jackson-annotations:2.9.6")
 
-    compileOnly('org.projectlombok:lombok')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compileOnly("org.projectlombok:lombok")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
