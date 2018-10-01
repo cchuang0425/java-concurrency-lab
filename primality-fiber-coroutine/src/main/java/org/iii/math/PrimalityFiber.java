@@ -2,19 +2,20 @@ package org.iii.math;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.SuspendableCallable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import org.iii.concurrent.BaseWorker;
+import org.iii.common.BaseFiber;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 @Component
 @Scope(SCOPE_PROTOTYPE)
-public class PrimalityFiber extends BaseWorker implements Callable<List<Long>> {
+public class PrimalityFiber extends BaseFiber implements SuspendableCallable<List<Long>> {
 
     @Autowired
     private MathService service;
@@ -26,13 +27,13 @@ public class PrimalityFiber extends BaseWorker implements Callable<List<Long>> {
     }
 
     @Override
-    public List<Long> call() {
+    public List<Long> run() throws SuspendExecution, InterruptedException {
         List<Long> result = new ArrayList<>();
 
         for (long i = 1; i <= n; i++) {
-            long fib = waitAndTake(service.calFib(i));
-            boolean prime = waitAndTake(service.calPrime(fib));
-            if (prime) { result.add(i); }
+            Long fibResult = receiveFromChannel(service.calFib(i));
+            Boolean primeResult = receiveFromChannel(service.calPrime(fibResult));
+            if (primeResult) {result.add(i);}
         }
 
         return result;

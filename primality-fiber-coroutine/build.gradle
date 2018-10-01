@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.5.RELEASE'
+		springBootVersion = '1.5.16.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -48,3 +48,9 @@ bootRun {
 test {
     jvmArgs = ["-javaagent:${configurations.quasar.singleFile}"]
 }
+
+task copyQuasar(type: Copy) {
+    into "$projectDir/lib"
+    from configurations.quasar
+}
+build.finalizedBy(copyQuasar)

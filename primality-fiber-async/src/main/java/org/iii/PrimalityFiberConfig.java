@@ -20,8 +20,10 @@ public class PrimalityFiberConfig {
 
     public static final String COMMAND_QUEUE = "CommandQueue";
     public static final String RESULT_QUEUE = "ResultQueue";
+    public static final String WORKER_POOL_NAME = "workerPool";
+    public static final String MQ_LISTENER_CONTAINER_FACTORY_NAME = "mqListenerContainerFactory";
 
-    @Bean("workerPool")
+    @Bean(WORKER_POOL_NAME)
     public Executor asyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(10);
@@ -34,7 +36,7 @@ public class PrimalityFiberConfig {
         return executor;
     }
 
-    @Bean("mqListenerContainerFactory")
+    @Bean(MQ_LISTENER_CONTAINER_FACTORY_NAME)
     public JmsListenerContainerFactory<?> mqListenerContainerFactory(ConnectionFactory connectionFactory,
             DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();

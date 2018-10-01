@@ -19,6 +19,8 @@ public class FibCommand implements Command<Long, Long> {
 
     @Override
     public Long execute(Long param) {
+        System.out.printf("cal fib: %d...%n", param);
+
         if (param < 0L) {
             return 0L;
         } else {

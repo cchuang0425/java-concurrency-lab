@@ -19,6 +19,7 @@ public class PrimeCommand implements Command<Boolean, Long> {
 
     @Override
     public Boolean execute(Long param) {
+        System.out.printf("cal prime: %d...%n", param);
         return service.isPrime(param);
     }
 }
