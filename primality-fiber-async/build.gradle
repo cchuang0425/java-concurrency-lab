@@ -40,6 +40,8 @@ dependencies {
     compile("com.fasterxml.jackson.core:jackson-core:2.9.6")
     compile("com.fasterxml.jackson.core:jackson-annotations:2.9.6")
 
+    compile("org.jooq:jool-java-8:0.9.14")
+
     compileOnly("org.projectlombok:lombok")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

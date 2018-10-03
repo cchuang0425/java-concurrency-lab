@@ -12,7 +12,8 @@ public class CommandSender {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    public void sendCommand(String commandMessage) {
-        jmsTemplate.convertAndSend(COMMAND_QUEUE, commandMessage);
+    public void sendCommand(String jsonMessage) {
+        System.out.printf("send command: %s%n", jsonMessage);
+        jmsTemplate.convertAndSend(COMMAND_QUEUE, jsonMessage);
     }
 }

@@ -6,7 +6,10 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.ImmutableMap;
+import org.springframework.context.ApplicationContext;
 
+import org.iii.PrimalityFiberConfig;
+import org.iii.common.ChannelRegistry;
 import org.iii.domain.ResultMessage;
 
 import static org.iii.util.JsonUtils.convertObjectFromJson;
@@ -38,5 +41,25 @@ public class MathResults {
             ex.printStackTrace(System.err);
             throw ex;
         }
+    }
+
+    public static void resumeToCommand(ResultMessage<?> resultMessage) {
+        switch (resultMessage.getName()) {
+            case MathCommands.FIB_COMMAND:
+                resume((ResultMessage<Long>) resultMessage, Long.class);
+                break;
+            case MathCommands.PRIME_COMMAND:
+                resume((ResultMessage<Boolean>) resultMessage, Boolean.class);
+                break;
+            default:
+        }
+    }
+
+    private static <R> void resume(ResultMessage<R> trueResult, Class<R> resultType) {
+        ApplicationContext context = PrimalityFiberConfig.ApplicationContextProvider.getApplicationContext();
+        ChannelRegistry channels = context.getBean(ChannelRegistry.class);
+
+        channels.find(trueResult.getId(), resultType)
+                .ifPresent(channel -> channel.offer(trueResult.getResult()));
     }
 }
