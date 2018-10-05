@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableMap;
 import org.springframework.context.ApplicationContext;
 
 import org.iii.PrimalityFiberConfig;
-import org.iii.domain.ChannelRegistry;
+import org.iii.common.ChannelRegistry;
 import org.iii.domain.ResultMessage;
 
 import static org.iii.util.JsonUtils.convertObjectFromJson;
@@ -64,14 +64,12 @@ public class MathResults {
         ApplicationContext context = PrimalityFiberConfig.ApplicationContextProvider.getApplicationContext();
         ChannelRegistry channels = context.getBean(ChannelRegistry.class);
 
-
         Optional<Channel<R>> maybe = channels.find(trueResult.getId(), resultType);
         if (maybe.isPresent()) {
-            Channel<R> channel = maybe.get();
-            try {
+            try (Channel<R> channel = maybe.get()) {
                 channel.send(trueResult.getResult());
             } catch (InterruptedException | SuspendExecution ex) {
-                ex.printStackTrace(System.err);
+                throw new AssertionError(ex);
             }
         }
     }
