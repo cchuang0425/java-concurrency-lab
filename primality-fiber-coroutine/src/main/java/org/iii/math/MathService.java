@@ -6,7 +6,7 @@ import co.paralleluniverse.strands.channels.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.iii.domain.ChannelRegistry;
+import org.iii.common.ChannelRegistry;
 import org.iii.domain.CommandMessage;
 import org.iii.mq.CommandSender;
 

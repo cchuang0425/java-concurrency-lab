@@ -1,4 +1,4 @@
-package org.iii.domain;
+package org.iii.common;
 
 import java.util.Map;
 import java.util.Optional;
