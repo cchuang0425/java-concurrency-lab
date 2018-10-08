@@ -1,23 +1,26 @@
-buildscript {
-    ext {
-        springBootVersion = "2.0.5.RELEASE"
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
-}
-
 apply plugin: "java"
 apply plugin: "eclipse"
-apply plugin: "org.springframework.boot"
-apply plugin: "io.spring.dependency-management"
+apply plugin: "idea"
 
-group = "org.iii"
-version = "0.0.1-SNAPSHOT"
+group "org.iii"
+version "0.0.1-SNAPSHOT"
+
 sourceCompatibility = 1.8
+
+apply plugin: "application"
+mainClassName = "org.iii.PrimalityFiberApplication"
+
+/*
+jar {
+    manifest {
+        attributes "Main-Class": "org.iii.PrimalityFiberApplication"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+*/
 
 repositories {
     mavenCentral()
@@ -26,9 +29,14 @@ repositories {
 configurations { quasar }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-activemq")
-    compile("org.apache.activemq:activemq-broker")
-    compile("org.apache.activemq:activemq-pool")
+    compile("org.apache.activemq:activemq-broker:5.15.6")
+    compile("org.apache.activemq:activemq-jms-pool:5.15.6")
+    compile("org.apache.activemq:activemq-pool:5.15.6")
+
+    compile("com.google.guava:guava:20.0")
+
+    compile("org.slf4j:slf4j-api:1.7.25")
+    compile("org.slf4j:log4j-over-slf4j:1.7.25")
 
     compile("com.fasterxml.jackson.core:jackson-databind:2.9.6")
     compile("com.fasterxml.jackson.core:jackson-core:2.9.6")
@@ -38,32 +46,17 @@ dependencies {
     quasar("co.paralleluniverse:quasar-core:0.7.10:jdk8@jar")
 
     compileOnly("org.projectlombok:lombok:1.16.20")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+    testCompile("junit:junit:4.12")
 }
 
 /* instrument with JavaAgent
-bootRun {
-    jvmArgs = ["-javaagent:${configurations.quasar.singleFile}"]
-}
-
 test {
     jvmArgs = ["-javaagent:${configurations.quasar.singleFile}"]
 }
-
-task copyQuasar(type: Copy) {
-    into "$projectDir/lib"
-    from configurations.quasar
-}
-build.finalizedBy(copyQuasar)
- */
+*/
 
 /* AOT */
-bootRun {
-    if (project.hasProperty('args')) {
-        args project.args.split(',')
-    }
-}
-
 compileJava.dependsOn processResources
 compileJava {
     doLast {
@@ -86,3 +79,10 @@ compileTestJava {
         }
     }
 }
+
+
+task copyQuasar(type: Copy) {
+    into "$projectDir/lib"
+    from configurations.quasar
+}
+build.finalizedBy(copyQuasar)

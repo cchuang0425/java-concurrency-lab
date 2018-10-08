@@ -2,6 +2,7 @@ package org.iii;
 
 import java.util.List;
 
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -32,11 +33,12 @@ public class PrimalityFiberApplication {
             } else {
                 System.out.println("run PrimalityFiber...");
 
-                PrimalityFiber fiber = context.getBean(PrimalityFiber.class, N);
+                PrimalityFiber primalityFiber = context.getBean(PrimalityFiber.class, N);
                 FiberScheduler scheduler = context.getBean(WORKER_POOL_NAME, FiberScheduler.class);
+                Fiber<List<Long>> fiber = scheduler.newFiber(primalityFiber);
+                scheduler.shutdown();
 
-                List<Long> primes = scheduler.newFiber(fiber)
-                                             .get();
+                List<Long> primes = fiber.start().get();
 
                 System.out.println(primes);
 

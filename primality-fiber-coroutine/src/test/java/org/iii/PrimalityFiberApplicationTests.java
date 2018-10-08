@@ -3,6 +3,7 @@ package org.iii;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberScheduler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,12 +29,14 @@ public class PrimalityFiberApplicationTests {
     }
 
     @Test
-    public void testAusRunCLI() throws ExecutionException, InterruptedException {
-        PrimalityFiber fiber = context.getBean(PrimalityFiber.class, N);
+    public void testAsRunCLI() throws ExecutionException, InterruptedException {
+        PrimalityFiber primalityFiber = context.getBean(PrimalityFiber.class, N);
         FiberScheduler exec = context.getBean(WORKER_POOL_NAME, FiberScheduler.class);
-        List<Long> primes = exec.newFiber(fiber)
-                                .start()
-                                .get();
+        Fiber<List<Long>> fiber = exec.newFiber(primalityFiber);
+        exec.shutdown();
+
+        List<Long> primes = fiber.start().get();
+
         System.out.println(primes);
     }
 
