@@ -26,13 +26,13 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-activemq')
+    compile("org.springframework.boot:spring-boot-starter-activemq")
     compile("org.apache.activemq:activemq-broker")
     compile("org.apache.activemq:activemq-pool")
     
     compile("com.fasterxml.jackson.core:jackson-databind:2.9.6")
     compile("com.fasterxml.jackson.core:jackson-core:2.9.6")
     compile("com.fasterxml.jackson.core:jackson-annotations:2.9.6")
-    compileOnly('org.projectlombok:lombok')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compileOnly("org.projectlombok:lombok:1.16.20")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }

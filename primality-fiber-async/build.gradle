@@ -42,6 +42,6 @@ dependencies {
 
     compile("org.jooq:jool-java-8:0.9.14")
 
-    compileOnly("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok:1.16.20")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

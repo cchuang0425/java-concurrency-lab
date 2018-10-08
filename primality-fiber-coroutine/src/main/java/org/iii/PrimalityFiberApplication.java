@@ -30,6 +30,8 @@ public class PrimalityFiberApplication {
             if (args == null || args.length == 0) {
                 return;
             } else {
+                System.out.println("run PrimalityFiber...");
+
                 PrimalityFiber fiber = context.getBean(PrimalityFiber.class, N);
                 FiberScheduler scheduler = context.getBean(WORKER_POOL_NAME, FiberScheduler.class);
 
