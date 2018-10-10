@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.16.RELEASE'
+        springBootVersion = '2.0.5.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -37,10 +37,13 @@ dependencies {
     compile("co.paralleluniverse:quasar-core:0.7.10:jdk8")
     quasar("co.paralleluniverse:quasar-core:0.7.10:jdk8@jar")
 
+    compile("org.jooq:jool-java-8:0.9.14")
+
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+/* JavaAgent
 bootRun {
     jvmArgs = ["-javaagent:${configurations.quasar.singleFile}"]
 }
@@ -48,9 +51,34 @@ bootRun {
 test {
     jvmArgs = ["-javaagent:${configurations.quasar.singleFile}"]
 }
+ */
 
 task copyQuasar(type: Copy) {
     into "$projectDir/lib"
     from configurations.quasar
 }
 build.finalizedBy(copyQuasar)
+
+/* AOT */
+compileJava.dependsOn processResources
+compileJava {
+    doLast {
+        ant.taskdef(name: "instrumentation",
+                classname: "co.paralleluniverse.fibers.instrument.InstrumentationTask",
+                classpath: configurations.compile.asPath)
+        ant.instrumentation(verbose: "true", check: "true", debug: "true") {
+            fileset(dir: sourceSets.main.output.classesDirs.singleFile)
+        }
+    }
+}
+compileTestJava.dependsOn processTestResources
+compileTestJava {
+    doLast {
+        ant.taskdef(name: "instrumentation",
+                classname: "co.paralleluniverse.fibers.instrument.InstrumentationTask",
+                classpath: configurations.testCompile.asPath)
+        ant.instrumentation(verbose: "true", check: "true", debug: "true") {
+            fileset(dir: sourceSets.test.output.classesDirs.singleFile)
+        }
+    }
+}
