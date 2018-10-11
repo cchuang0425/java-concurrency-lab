@@ -1,0 +1,84 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.5.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'org.iii'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations { quasar }
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-activemq')
+    compile("org.apache.activemq:activemq-broker")
+    compile("org.apache.activemq:activemq-pool")
+
+    compile("com.fasterxml.jackson.core:jackson-databind:2.9.6")
+    compile("com.fasterxml.jackson.core:jackson-core:2.9.6")
+    compile("com.fasterxml.jackson.core:jackson-annotations:2.9.6")
+
+    compile("co.paralleluniverse:quasar-core:0.7.10:jdk8")
+    quasar("co.paralleluniverse:quasar-core:0.7.10:jdk8@jar")
+
+    compile("org.jooq:jool-java-8:0.9.14")
+
+    compileOnly('org.projectlombok:lombok')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+/* JavaAgent
+bootRun {
+    jvmArgs = ["-javaagent:${configurations.quasar.singleFile}"]
+}
+
+test {
+    jvmArgs = ["-javaagent:${configurations.quasar.singleFile}"]
+}
+ */
+
+task copyQuasar(type: Copy) {
+    into "$projectDir/lib"
+    from configurations.quasar
+}
+build.finalizedBy(copyQuasar)
+
+/* AOT */
+compileJava.dependsOn processResources
+compileJava {
+    doLast {
+        ant.taskdef(name: "instrumentation",
+                classname: "co.paralleluniverse.fibers.instrument.InstrumentationTask",
+                classpath: configurations.compile.asPath)
+        ant.instrumentation(verbose: "true", check: "true", debug: "true") {
+            fileset(dir: sourceSets.main.output.classesDirs.singleFile)
+        }
+    }
+}
+compileTestJava.dependsOn processTestResources
+compileTestJava {
+    doLast {
+        ant.taskdef(name: "instrumentation",
+                classname: "co.paralleluniverse.fibers.instrument.InstrumentationTask",
+                classpath: configurations.testCompile.asPath)
+        ant.instrumentation(verbose: "true", check: "true", debug: "true") {
+            fileset(dir: sourceSets.test.output.classesDirs.singleFile)
+        }
+    }
+}
