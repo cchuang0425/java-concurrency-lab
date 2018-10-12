@@ -3,7 +3,7 @@ package org.iii.math;
 import co.paralleluniverse.fibers.FiberScheduler;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.channels.LongChannel;
+import co.paralleluniverse.strands.channels.Channel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class MathFibersTest {
     @Test
     @Suspendable
     public void testRunFibGen() throws InterruptedException, SuspendExecution {
-        LongChannel channel = MathFibers.runFibGenerator();
+        Channel<Long> channel = MathFibers.runFibGenerator();
 
         for (long i = 1L; i <= 45L; i++) {
             long fib = channel.receive();

@@ -5,6 +5,7 @@ import java.util.List;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberScheduler;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.channels.Channel;
 import co.paralleluniverse.strands.channels.LongChannel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +30,7 @@ public class PrimalityFiberTest {
     @Test
     @Suspendable
     public void testSingleFiber() throws InterruptedException {
-        LongChannel counter = MathFibers.runCounterGenerator();
+        Channel<Long> counter = MathFibers.runCounterGenerator();
         PrimalityFiber runner = context.getBean(PrimalityFiber.class, counter);
         Fiber<Void> fiber = new Fiber<>(scheduler, runner);
 
@@ -47,7 +48,7 @@ public class PrimalityFiberTest {
     @Test
     @Suspendable
     public void testDoubleFibers() throws InterruptedException {
-        LongChannel counter = MathFibers.runCounterGenerator();
+        Channel<Long> counter = MathFibers.runCounterGenerator();
         PrimalityFiber runner1 = context.getBean(PrimalityFiber.class, counter);
         Fiber<Void> fiber1 = new Fiber<>(scheduler, runner1);
         PrimalityFiber runner2 = context.getBean(PrimalityFiber.class, counter);
@@ -67,8 +68,8 @@ public class PrimalityFiberTest {
 
     @Test
     @Suspendable
-    public void testTribleFibers() throws InterruptedException {
-        LongChannel counter = MathFibers.runCounterGenerator();
+    public void testTripleFibers() throws InterruptedException {
+        Channel<Long> counter = MathFibers.runCounterGenerator();
         PrimalityFiber runner1 = context.getBean(PrimalityFiber.class, counter);
         Fiber<Void> fiber1 = new Fiber<>(scheduler, runner1);
         PrimalityFiber runner2 = context.getBean(PrimalityFiber.class, counter);

@@ -2,7 +2,7 @@ package org.iii.math;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.channels.LongChannel;
+import co.paralleluniverse.strands.channels.Channel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ public class MathFibersTest {
     @Test
     @Suspendable
     public void testCounter() throws InterruptedException, SuspendExecution {
-        LongChannel channel = MathFibers.runCounterGenerator();
+        Channel<Long> channel = MathFibers.runCounterGenerator();
 
         long counter = 0L;
         for (long i = 1L; i <= 45L; i++) {

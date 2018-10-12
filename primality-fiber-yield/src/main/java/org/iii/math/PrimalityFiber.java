@@ -3,6 +3,7 @@ package org.iii.math;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.SuspendableRunnable;
+import co.paralleluniverse.strands.channels.Channel;
 import co.paralleluniverse.strands.channels.LongChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,9 +23,9 @@ public class PrimalityFiber implements SuspendableRunnable {
     @Autowired
     private MathService service;
 
-    private LongChannel counter;
+    private Channel<Long> counter;
 
-    public PrimalityFiber(LongChannel counter) {
+    public PrimalityFiber(Channel<Long> counter) {
         this.counter = counter;
     }
 
