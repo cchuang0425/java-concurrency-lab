@@ -57,13 +57,13 @@ task copyQuasar(type: Copy) {
 build.finalizedBy(copyQuasar)
  */
 
-/* AOT */
 bootRun {
     if (project.hasProperty('args')) {
         args project.args.split(',')
     }
 }
 
+/* AOT */f
 compileJava.dependsOn processResources
 compileJava {
     doLast {
@@ -86,3 +86,4 @@ compileTestJava {
         }
     }
 }
+ 

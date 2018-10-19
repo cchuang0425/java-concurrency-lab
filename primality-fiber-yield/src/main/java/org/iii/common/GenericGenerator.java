@@ -9,15 +9,15 @@ import co.paralleluniverse.strands.channels.Channel;
 public abstract class GenericGenerator<T extends Comparable<T>, R> implements SuspendableRunnable {
 
     private Channel<R> channel;
-    private Function<T, T> increator;
+    private Function<T, T> incrementor;
     private Function<T, R> processor;
     private T init;
     private T limit;
 
-    protected GenericGenerator(Channel<R> channel, T init, T limit, Function<T, T> increator,
+    protected GenericGenerator(Channel<R> channel, T init, T limit, Function<T, T> incrementor,
             Function<T, R> processor) {
         this.channel = channel;
-        this.increator = increator;
+        this.incrementor = incrementor;
         this.processor = processor;
         this.init = init;
         this.limit = limit;
@@ -26,7 +26,7 @@ public abstract class GenericGenerator<T extends Comparable<T>, R> implements Su
     @Override
     public void run() throws SuspendExecution, InterruptedException {
         while (init.compareTo(limit) <= 0) {
-            init = increator.apply(init);
+            init = incrementor.apply(init);
             channel.send(processor.apply(init));
         }
     }
